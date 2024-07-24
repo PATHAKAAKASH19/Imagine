@@ -18,7 +18,7 @@ const ArrowShape = ({arrows, line = false}) => {
             pointerLength={0}
             pointerWidth={0}
             stroke="black"
-            strokeWidth={4}
+            strokeWidth={1}
             fill="black"
             draggable={true}
           />

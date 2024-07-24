@@ -12,9 +12,10 @@ export default function EllipseShape({ ellipses }) {
             y={ellipse.y}
             radiusX={ellipse.radiusX}
             radiusY={ellipse.radiusY}
-            fill="yellow"
+            fill="skyblue"
             stroke="black"
-            strokeWidth={4}
+            strokeWidth={2}
+            draggable={true}
           />
         );
       })}

@@ -16,7 +16,7 @@ export default function Pen({lines}) {
            key={index}
            points={line.points}
            stroke="#f55442"
-           strokeWidth={8}
+           strokeWidth={3}
            tension={0.5}
            lineCap="round"
            lineJoin="round"

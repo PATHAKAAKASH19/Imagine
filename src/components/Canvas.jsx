@@ -79,6 +79,7 @@ export default function Canvas() {
      onMouseDown={handleDown}
      onMouseMove={handleMove}
      onMouseUp={handleUp}
+     draggable={true}
      >
       
         <Layer>
