@@ -1,32 +1,35 @@
 import React, { useEffect } from 'react'
 import {Stage , Layer, Text} from "react-konva"
 import { useRef,useState } from 'react'
-import ArrowShape from './shapes/Arrow'
-import useArrow from '../hooks/useArrow'
-import Tools from './tools/Tools'
-import useRectangle from '../hooks/useRectangle'
-import usePen from '../hooks/usePen'
-import Rectangle from './shapes/Rectangle'
-import Pen from './shapes/Pen'
-import useEllipse from '../hooks/useEllipse'
-
-import EllipseShape from './shapes/EllipseShape'
+import {useEllipse, useArrow, useText, useRectangle, usePen, useDiamond} from "../hooks/index"
+import {ArrowLayer, DiamondLayer, EllipseLayer, PenLayer, RectangleLayer,TextLayer,Tools } from "../components/index"
 
 
 export default function Canvas() {
 
 
+ const [erase, setEraser] = useState([])
+
+
   const [tool, setTool] = useState("Pen")
-
-
-  const isDrawing = useRef(false);
  
+  const stageRef = useRef(null);
+  const isDrawing = useRef(false);
+  const [dragStage, setDragStage] = useState(false)
+
+  
+
+  const lastCenterRef = useRef(null);
+  const lastDistRef = useRef(0);
+
+
   const {handleArrowDown, handleArrowMove, handleArrowUp, arrows} = useArrow()
   const   {handleRectangleDown, handleRectangleMove, handleRectangleUp, rectangles} = useRectangle()
   const {handlePenDown, handlePenMove, handlePenUp, lines} = usePen()
-
   const { handleEllipseDown,handleEllipseMove,handleEllipseUp,ellipses} = useEllipse()
- 
+  const {handleClick, texts} = useText(stageRef)
+  const {handleDiamondDown, handleDiamondMove, handleDiamondUp, diamonds} = useDiamond()
+
  const handleDown = (e) => {
    if(tool === "Pen"){
      handlePenDown(e, isDrawing)
@@ -36,9 +39,9 @@ export default function Canvas() {
     handleArrowDown(e, isDrawing)
    }else if (tool === "Ellipse"){
     handleEllipseDown(e, isDrawing)
+   }else if (tool === "Diamond") {
+    handleDiamondDown(e, isDrawing)
    }
-  
-  
   
   }
   
@@ -53,6 +56,8 @@ export default function Canvas() {
    handleArrowMove(e, isDrawing)
   }else if(tool === "Ellipse"){
     handleEllipseMove(e , isDrawing)
+  }else if (tool === "Diamond"){
+    handleDiamondMove(e, isDrawing)
   }
  }
 
@@ -65,13 +70,24 @@ export default function Canvas() {
    handleArrowUp(isDrawing)
   }else if(tool==="Ellipse"){
     handleEllipseUp(isDrawing)
+  }else if(tool === "Diamond"){
+    handleDiamondUp(isDrawing)
   }
  }
 
 
+ useEffect(() => {
 
-  
-  return (
+  if(tool === "StageMove"){
+    setDragStage(true)
+  }else{
+    setDragStage(false)  
+  }
+
+ }, [tool])
+
+
+return (
     <div>
     <Stage
      width={window.innerWidth} 
@@ -79,19 +95,24 @@ export default function Canvas() {
      onMouseDown={handleDown}
      onMouseMove={handleMove}
      onMouseUp={handleUp}
-     draggable={true}
+     onClick={handleClick}
+     ref={stageRef}
+     draggable={dragStage}
+    
      >
       
         <Layer>
           <Text text="Just start drawing" x={5} y={30} />
         </Layer>
-        <Pen lines={lines} ></Pen>
-        <ArrowShape   arrows={arrows} />
-        <Rectangle rectangles={rectangles}></Rectangle>
-        <EllipseShape ellipses={ellipses}></EllipseShape>
+        <PenLayer lines={lines} tool={tool} />
+        <ArrowLayer  arrows={arrows} tool={tool} />
+        <RectangleLayer rectangles={rectangles} tool={tool}/>
+        <EllipseLayer ellipses={ellipses} tool={tool}/>
+       <TextLayer texts={texts}  tool={tool} />
+       <DiamondLayer diamonds={diamonds} tool={tool}/>
     </Stage>
 
-    <Tools  tool={tool} setTool={setTool} ></Tools>
+    <Tools  tool={tool} setTool={setTool} />
      
     </div>
   )

@@ -4,16 +4,21 @@ export default function Tools({tool, setTool}) {
 
  
   const handleTool = (e) => {
-    console.log(tool)
+    
     setTool(e.target.value)
-    console.log(tool)
+ 
   }
   const tools = [
     "Pen",
     "Ellipse",
     "Rectangle",
     "Arrow",
-    "Diamond"
+    "Diamond",
+    "Text",
+    "Image",
+    "Eraser",
+    "Drag",
+    "StageMove"
   ]
   return (
     <div>
