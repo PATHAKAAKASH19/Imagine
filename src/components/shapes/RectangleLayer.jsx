@@ -1,14 +1,14 @@
 
-import React, {useState , useEffect} from 'react'
-import { Layer, Rect } from 'react-konva'
+import React, {useState , useEffect, forwardRef} from 'react'
+import { Layer, Rect, Transformer } from 'react-konva'
 
-export default function RectangleLayer({rectangles , tool}) {
+function RectangleLayer({rectangles , tool, transform}, trRef) {
 
  
 
  
   const [drag , setDrag] = useState(false)
-
+ 
 
   useEffect(() => {
     if(tool==="Drag") {
@@ -17,6 +17,9 @@ export default function RectangleLayer({rectangles , tool}) {
       setDrag(false)
     }
   } , [rectangles, tool])
+
+
+
 
 
  return (
@@ -37,16 +40,31 @@ export default function RectangleLayer({rectangles , tool}) {
                        strokeWidth={2}
                        fill="pink"
                        draggable={drag}
+                       onClick={tool==="Drag" ? transform : null}
+                      
                        
                      />
                   
     ) }))}
+
+
+        <Transformer
+       ref={trRef}
+       rotateEnabled={true}
+       resizeEnabled={true}
+       scaleEnabled={true}
+       skewEnabled={true}
+      />
         
     </Layer>)
         
-            
+           
+        
+
   }
    
+
+  export default forwardRef(RectangleLayer)
   
 
 

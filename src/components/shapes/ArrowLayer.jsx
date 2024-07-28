@@ -1,7 +1,7 @@
-import React, { useState, useEffect} from 'react';
-import { Layer, Arrow } from 'react-konva';
+import React, { useState, useEffect, forwardRef} from 'react';
+import { Layer, Arrow ,Transformer} from 'react-konva';
 
-const ArrowLayer = ({arrows, tool}) => {
+const ArrowLayer = ({arrows, tool, transform}, trRef) => {
  
   const [drag , setDrag] = useState(false)
 
@@ -30,8 +30,19 @@ const ArrowLayer = ({arrows, tool}) => {
             strokeWidth={5}
             fill="black"
             draggable={drag}
+            onClick={tool==="Drag" ? transform : null}
+           
           />
         ))}
+
+
+        <Transformer
+         ref={trRef}
+         rotateEnabled={true}
+         resizeEnabled={true}
+         scaleEnabled={true}
+         skewEnabled={true}
+        />
       </Layer>
     );
   
@@ -40,4 +51,4 @@ const ArrowLayer = ({arrows, tool}) => {
   
 };
 
-export default ArrowLayer;
+export default forwardRef(ArrowLayer);

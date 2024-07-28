@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from 'react'
-import {Layer, Rect, RegularPolygon} from "react-konva"
+import React, { useEffect, useState , forwardRef} from 'react'
+import { Layer, RegularPolygon, Transformer} from "react-konva"
 
 
-export default function DiamondLayer({diamonds , tool}) {
+ function DiamondLayer({diamonds , tool, transform}, trRef) {
 
  const [drag, setDrag] = useState(false)
+ 
+ 
 
  useEffect(() => {
 
@@ -15,17 +17,23 @@ export default function DiamondLayer({diamonds , tool}) {
     setDrag(false)
   }
  }, [diamonds, tool])
+
+
+
  
   return (
 
    
-    <Layer>
+    <Layer >
 
         {
           
             diamonds.map((diamond, index) => {
               
-             return( <RegularPolygon
+             return(
+              
+             
+              <RegularPolygon
                 key={index}
                 x={diamond.x}
                 y={diamond.y}
@@ -35,13 +43,34 @@ export default function DiamondLayer({diamonds , tool}) {
                stroke="black"
                strokeWidth={2}
                draggable={drag}
-               
-               
-              />)
+              
+               onClick={transform}
+              
+              /> 
+            )
 
            })
         }
 
+
+       
+           
+              
+               
+              
+                <Transformer
+                
+                ref={trRef}
+                rotateEnabled={true}
+                resizeEnabled={true}
+                scaleEnabled={true}
+                skewEnabled={true}
+              />
+          
+       
     </Layer>
   )
 }
+
+
+export default forwardRef(DiamondLayer)

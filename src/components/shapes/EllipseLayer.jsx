@@ -1,20 +1,26 @@
-import React, { useEffect, useState } from "react";
-import { Layer, Ellipse } from "react-konva";
 
-export default function EllipseLayer({ ellipses, tool }) {
+import React, { useEffect, useState, forwardRef} from "react";
+import { Layer, Ellipse, Transformer } from "react-konva";
+
+
+function EllipseLayer({ ellipses, tool , transform}, trRef) {
 
   const [drag , setDrag] = useState(false)
+ 
 
 
   useEffect(() => {
     if(tool==="Drag") {
       setDrag(true)
+     
     }else{
       setDrag(false)
     }
   } , [ellipses, tool])
 
 
+  
+  
   return (
     <Layer>
       {   ellipses.map((ellipse, index) => {
@@ -29,9 +35,23 @@ export default function EllipseLayer({ ellipses, tool }) {
             stroke="black"
             strokeWidth={2}
             draggable={drag}
+            onClick={tool==="Drag" ? transform : null}
           />
         );
       })}
+
+      <Transformer
+       ref={trRef}
+       rotateEnabled={true}
+       resizeEnabled={true}
+       scaleEnabled={true}
+       skewEnabled={true}
+      />
     </Layer>
   );
+
 }
+
+
+
+export default forwardRef(EllipseLayer)

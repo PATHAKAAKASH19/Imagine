@@ -1,25 +1,26 @@
 
 import React from 'react'
-import { useState } from "react";
+import { useState , useRef} from "react";
 
 export default function useDiamond() {
     const [diamonds, setDiamonds] = useState([])
-  
+    
    
       
-     const handleDiamondDown = (e, isDrawing) => {
+     const handleDiamondDown = (e, isDrawing,) => {
+    
      
       isDrawing.current = true
       const pos = e.target.getStage().getPointerPosition()
       setDiamonds([...diamonds, {x: pos.x, y: pos.y, radius: 0  }])
       
-   
+  
     };
   
    
     const handleDiamondMove = (e, isDrawing ) => {
      
-      if(!isDrawing.current){
+      if(!isDrawing.current ){
         return
       }
     
@@ -46,7 +47,8 @@ export default function useDiamond() {
         handleDiamondDown,
         handleDiamondMove,
         handleDiamondUp,
-        diamonds
+        diamonds,
+        
     }
      
 }

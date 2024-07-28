@@ -1,10 +1,12 @@
 
-import React, {useState, useEffect} from 'react'
-import { Layer, Line } from 'react-konva'
+import React, {useState, useEffect, forwardRef} from 'react'
+import { Layer, Line, Transformer } from 'react-konva'
 
-export default function PenLayer({lines, tool}) {
+function PenLayer({lines, tool, transform}, trRef) {
 
   const [drag , setDrag] = useState(false)
+
+
 
 
   useEffect(() => {
@@ -14,6 +16,8 @@ export default function PenLayer({lines, tool}) {
       setDrag(false)
     }
   } , [lines, tool])
+
+
 
  
    
@@ -31,10 +35,23 @@ export default function PenLayer({lines, tool}) {
            lineCap="round"
            lineJoin="round"
            draggable={drag}
+          
+           onClick={tool==="Drag" ? transform : null}
          />)
 
         
        })}
+
+
+     <Transformer
+       ref={trRef}
+       rotateEnabled={true}
+       resizeEnabled={true}
+       scaleEnabled={true}
+       skewEnabled={true}
+      />
     </Layer>
   )
 }
+
+export default forwardRef(PenLayer)
