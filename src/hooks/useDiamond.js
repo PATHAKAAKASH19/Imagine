@@ -48,7 +48,7 @@ export default function useDiamond() {
         handleDiamondMove,
         handleDiamondUp,
         diamonds,
-        
+        setDiamonds
     }
      
 }

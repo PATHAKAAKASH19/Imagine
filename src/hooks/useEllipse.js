@@ -36,6 +36,7 @@ export default function useEllipse() {
     handleEllipseDown,
     handleEllipseMove,
     handleEllipseUp,
-    ellipses
+    ellipses,
+    setEllipses
   }
 }

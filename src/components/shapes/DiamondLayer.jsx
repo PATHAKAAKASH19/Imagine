@@ -1,5 +1,5 @@
 import React, { useEffect, useState , forwardRef} from 'react'
-import { Layer, RegularPolygon, Transformer} from "react-konva"
+import { Group, RegularPolygon, Transformer} from "react-konva"
 
 
  function DiamondLayer({diamonds , tool, transform}, trRef) {
@@ -24,7 +24,7 @@ import { Layer, RegularPolygon, Transformer} from "react-konva"
   return (
 
    
-    <Layer >
+    <Group >
 
         {
           
@@ -43,8 +43,8 @@ import { Layer, RegularPolygon, Transformer} from "react-konva"
                stroke="black"
                strokeWidth={2}
                draggable={drag}
-              
-               onClick={transform}
+                
+               onClick={tool==="Drag" ? transform : null}
               
               /> 
             )
@@ -59,7 +59,9 @@ import { Layer, RegularPolygon, Transformer} from "react-konva"
                
               
                 <Transformer
-                
+                 anchorStyleFunc={ (anchor)  =>{
+                  
+                  anchor.cornerRadius(10);}}
                 ref={trRef}
                 rotateEnabled={true}
                 resizeEnabled={true}
@@ -68,7 +70,7 @@ import { Layer, RegularPolygon, Transformer} from "react-konva"
               />
           
        
-    </Layer>
+    </Group>
   )
 }
 

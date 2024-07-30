@@ -1,6 +1,6 @@
 
 import React, {useState , useEffect, forwardRef} from 'react'
-import { Layer, Rect, Transformer } from 'react-konva'
+import { Group, Rect, Transformer } from 'react-konva'
 
 function RectangleLayer({rectangles , tool, transform}, trRef) {
 
@@ -24,7 +24,7 @@ function RectangleLayer({rectangles , tool, transform}, trRef) {
 
  return (
  
- <Layer>
+ <Group>
 
        
 {(rectangles.map((rectangle , index) => {
@@ -49,6 +49,9 @@ function RectangleLayer({rectangles , tool, transform}, trRef) {
 
 
         <Transformer
+         anchorStyleFunc={ (anchor)  =>{
+                  
+          anchor.cornerRadius(10);}}
        ref={trRef}
        rotateEnabled={true}
        resizeEnabled={true}
@@ -56,7 +59,7 @@ function RectangleLayer({rectangles , tool, transform}, trRef) {
        skewEnabled={true}
       />
         
-    </Layer>)
+    </Group>)
         
            
         

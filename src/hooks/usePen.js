@@ -40,7 +40,8 @@ export default function usePen() {
           handlePenDown,
           handlePenMove,
           handlePenUp,
-          lines
+          lines, 
+          setLines
       }
 
 }

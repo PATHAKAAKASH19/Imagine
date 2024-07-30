@@ -18,6 +18,7 @@
     "react-hook-form": "^7.52.1",
     "react-hotkeys": "^2.0.0",
     "react-konva": "^18.2.10",
+    "react-konva-utils": "^1.0.6",
     "react-redux": "^9.1.2",
     "styled-components": "^6.1.11",
     "uuid": "^10.0.0"

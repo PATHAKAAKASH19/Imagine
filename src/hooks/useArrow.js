@@ -35,7 +35,8 @@ export default function useArrow() {
         handleArrowDown,
         handleArrowMove,
         handleArrowUp,
-        arrows
+        arrows,
+        setArrows
     }
      
 }

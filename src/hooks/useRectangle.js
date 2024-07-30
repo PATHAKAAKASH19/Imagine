@@ -38,6 +38,7 @@ export default function useRectangle() {
         handleRectangleDown,
         handleRectangleMove,
         handleRectangleUp,
-        rectangles
+        rectangles,
+        setRectangles
       }
 }

@@ -1,6 +1,6 @@
 
 import React, {useState, useEffect, forwardRef} from 'react'
-import { Layer, Line, Transformer } from 'react-konva'
+import { Group, Line, Transformer } from 'react-konva'
 
 function PenLayer({lines, tool, transform}, trRef) {
 
@@ -22,7 +22,7 @@ function PenLayer({lines, tool, transform}, trRef) {
  
    
   return (
-    <Layer>
+    <Group>
      
        {lines.map((line, index) => {
          
@@ -44,13 +44,16 @@ function PenLayer({lines, tool, transform}, trRef) {
 
 
      <Transformer
+      anchorStyleFunc={ (anchor)  =>{
+                  
+        anchor.cornerRadius(10);}}
        ref={trRef}
        rotateEnabled={true}
        resizeEnabled={true}
        scaleEnabled={true}
        skewEnabled={true}
       />
-    </Layer>
+    </Group>
   )
 }
 

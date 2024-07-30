@@ -1,7 +1,7 @@
 import React, { useEffect, useRef,useState  } from 'react'
 import {Stage , Layer, Text} from "react-konva"
 import {useEllipse, useArrow, useRectangle, usePen, useDiamond} from "../hooks/index"
-import {ArrowLayer, DiamondLayer, EllipseLayer, PenLayer, RectangleLayer,Tools } from "../components/index"
+import {ArrowLayer, DiamondLayer, EllipseLayer, PenLayer, RectangleLayer,Tools, ImageLayer } from "../components/index"
 
 
 export default function Canvas() {
@@ -17,16 +17,18 @@ export default function Canvas() {
 
 
   const trRef = useRef(null)
+  const eraseRef = useRef(null)
+
   
 
 
 
-  const {handleArrowDown, handleArrowMove, handleArrowUp, arrows} = useArrow()
-  const   {handleRectangleDown, handleRectangleMove, handleRectangleUp, rectangles} = useRectangle()
-  const {handlePenDown, handlePenMove, handlePenUp, lines} = usePen()
-  const { handleEllipseDown,handleEllipseMove,handleEllipseUp,ellipses} = useEllipse()
+  const {handleArrowDown, handleArrowMove, handleArrowUp, arrows, setArrows} = useArrow()
+  const   {handleRectangleDown, handleRectangleMove, handleRectangleUp, rectangles, setRectangles} = useRectangle()
+  const {handlePenDown, handlePenMove, handlePenUp, lines, setLines} = usePen()
+  const { handleEllipseDown,handleEllipseMove,handleEllipseUp,ellipses, setEllipses} = useEllipse()
 
-  const {handleDiamondDown, handleDiamondMove, handleDiamondUp, diamonds} = useDiamond()
+  const {handleDiamondDown, handleDiamondMove, handleDiamondUp, diamonds, setDiamonds} = useDiamond()
 
  const handleDown = (e) => {
    if(tool === "Pen" ){
@@ -39,8 +41,6 @@ export default function Canvas() {
     handleEllipseDown(e, isDrawing)
    }else if (tool === "Diamond" ) {
     handleDiamondDown(e, isDrawing)
-   }else if (tool === "Eraser"){
-     handleEraserDown(e)
    }
   
   }
@@ -75,6 +75,10 @@ export default function Canvas() {
   }
  }
 
+
+ const handleEraser = () =>  {
+  
+ }
 
  useEffect(() => {
 
@@ -112,7 +116,7 @@ return (
      width={window.innerWidth} 
      height={window.innerHeight}
      onMouseDown={handleDown}
-     onMouseMove={handleMove}
+     onMouseMove={tool === "Eraser" ? handleMove: handleEraser}
      onMouseUp={handleUp}
    
      onClick={removeTransform}
@@ -124,12 +128,15 @@ return (
         <Layer>
           <Text text="Just start drawing" x={5} y={30} />
         </Layer>
-        <PenLayer lines={lines} tool={tool}  transform={transform} ref={trRef}/>
-        <ArrowLayer  arrows={arrows} tool={tool}  transform={transform} ref={trRef}/>
-        <RectangleLayer rectangles={rectangles} tool={tool}    transform={transform} ref={trRef} />
-        <EllipseLayer ellipses={ellipses} tool={tool}  transform={transform} ref={trRef} />
+        <Layer>
+        <PenLayer lines={lines} tool={tool}  transform={transform} ref={trRef} setLines={setLines}/>
+        <ArrowLayer  arrows={arrows} tool={tool}  transform={transform} ref={trRef}  setArrows={setArrows}/>
+        <RectangleLayer rectangles={rectangles} tool={tool}    transform={transform} ref={trRef} setRectangles={setRectangles}/>
+        <EllipseLayer ellipses={ellipses} tool={tool}  transform={transform} ref={trRef} setEllipses={setEllipses}/>
       
-       <DiamondLayer diamonds={diamonds} tool={tool}   transform={transform} ref={trRef}/>
+       <DiamondLayer diamonds={diamonds} tool={tool}   transform={transform} ref={trRef} setDiamonds={setDiamonds}/>
+       <ImageLayer tool={tool} ></ImageLayer>
+       </Layer>
     </Stage>
 
     <Tools  tool={tool} setTool={setTool} />

@@ -16,7 +16,7 @@ export default function TextLayer({texts}) {
                fontFamily= 'Calibri'
                fill= '#555'
                width= {300}
-               padding={20}
+               padding={0}
                align={'center'}
               />
            )

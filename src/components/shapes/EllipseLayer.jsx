@@ -1,6 +1,6 @@
 
 import React, { useEffect, useState, forwardRef} from "react";
-import { Layer, Ellipse, Transformer } from "react-konva";
+import { Ellipse, Transformer, Group } from "react-konva";
 
 
 function EllipseLayer({ ellipses, tool , transform}, trRef) {
@@ -22,10 +22,11 @@ function EllipseLayer({ ellipses, tool , transform}, trRef) {
   
   
   return (
-    <Layer>
+    <Group>
       {   ellipses.map((ellipse, index) => {
         return (
           <Ellipse
+
             key={index}
             x={ellipse.x}
             y={ellipse.y}
@@ -41,13 +42,16 @@ function EllipseLayer({ ellipses, tool , transform}, trRef) {
       })}
 
       <Transformer
+       anchorStyleFunc={ (anchor)  =>{
+                   anchor.cornerRadius(10);}
+                  }
        ref={trRef}
        rotateEnabled={true}
        resizeEnabled={true}
        scaleEnabled={true}
        skewEnabled={true}
       />
-    </Layer>
+    </Group>
   );
 
 }
