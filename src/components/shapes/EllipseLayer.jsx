@@ -1,24 +1,66 @@
 
-import React, { useEffect, useState, forwardRef} from "react";
+import React, { useEffect, useState, forwardRef, useRef, useImperativeHandle} from "react";
 import { Ellipse, Transformer, Group } from "react-konva";
 
 
-function EllipseLayer({ ellipses, tool , transform}, trRef) {
+function EllipseLayer({ tool, transform}, refs) {
 
+ const {ellipseRef, trRef} = refs
   const [drag , setDrag] = useState(false)
- 
+  const [ellipses, setEllipses] = useState([])
+  
+  const isDrawing = useRef(false);
 
 
   useEffect(() => {
+    
     if(tool==="Drag") {
       setDrag(true)
-     
     }else{
       setDrag(false)
     }
   } , [ellipses, tool])
 
 
+  
+
+
+  
+
+  const handleEllipseDown = (e) => {
+  
+     isDrawing.current = true
+     const pos = e.target.getStage().getPointerPosition()
+     setEllipses([...ellipses, { x:pos.x, y:pos.y, radiusX : 0, radiusY : 0}])
+  }
+
+
+  const handleEllipseMove =  (e) => {
+     if(!isDrawing.current) return
+    
+     const pos = e.target.getStage().getPointerPosition()
+     const lastEllipse = ellipses[ellipses.length - 1]
+     lastEllipse.radiusY =Math.abs(lastEllipse.y- pos.y  )
+     lastEllipse.radiusX =Math.abs(lastEllipse.x- pos.x) 
+
+     ellipses.splice(ellipses.length -1 , 1 , lastEllipse)
+     setEllipses(ellipses.concat())
+    }
+
+  const handleEllipseUp =  () => {
+    isDrawing.current = false
+  }
+
+
+useImperativeHandle(ellipseRef,() => ({
+
+  
+    handleEllipseDown,
+    handleEllipseMove,
+    handleEllipseUp
+  
+
+}))
   
   
   return (
@@ -36,7 +78,7 @@ function EllipseLayer({ ellipses, tool , transform}, trRef) {
             stroke="black"
             strokeWidth={2}
             draggable={drag}
-            onClick={tool==="Drag" ? transform : null}
+            onClick={tool==="Drag" ? transform: null}
           />
         );
       })}

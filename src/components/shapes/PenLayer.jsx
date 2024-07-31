@@ -1,10 +1,15 @@
 
-import React, {useState, useEffect, forwardRef} from 'react'
+import React, {useState, useEffect, forwardRef, useRef, useImperativeHandle} from 'react'
 import { Group, Line, Transformer } from 'react-konva'
 
-function PenLayer({lines, tool, transform}, trRef) {
+function PenLayer({ tool , transform}, refs) {
 
+
+  const {penRef, trRef} = refs
   const [drag , setDrag] = useState(false)
+  const [lines, setLines] = useState([])
+ 
+  const isDrawing = useRef(false);
 
 
 
@@ -17,6 +22,41 @@ function PenLayer({lines, tool, transform}, trRef) {
     }
   } , [lines, tool])
 
+
+
+ 
+
+
+  const handlePenDown = (e) => {
+      isDrawing.current = true
+      const pos = e.target.getStage().getPointerPosition()
+      setLines([...lines, { points:[pos.x, pos.y] }])
+    }
+
+    const handlePenMove = (e) => {
+       if(!isDrawing.current){
+        return
+       }
+
+      const pos = e.target.getStage().getPointerPosition();
+      let lastLine = lines[lines.length - 1];
+      lastLine.points = lastLine.points.concat([pos.x, pos.y])
+      lines.splice( lines.length -1, 1, lastLine)
+      setLines(lines.concat())
+    }
+
+
+    const handlePenUp = () => {
+       isDrawing.current = false
+    }
+
+    useImperativeHandle(penRef, () => ({
+        handlePenDown,
+        handlePenMove,
+        handlePenUp,
+       
+      }
+    ))
 
 
  
@@ -35,18 +75,15 @@ function PenLayer({lines, tool, transform}, trRef) {
            lineCap="round"
            lineJoin="round"
            draggable={drag}
-          
-           onClick={tool==="Drag" ? transform : null}
+           onClick={tool==="Drag" ? transform: null}
          />)
-
-        
-       })}
-
-
-     <Transformer
+      })}
+    
+    <Transformer
       anchorStyleFunc={ (anchor)  =>{
-                  
-        anchor.cornerRadius(10);}}
+          anchor.cornerRadius(10);
+        }
+      }
        ref={trRef}
        rotateEnabled={true}
        resizeEnabled={true}

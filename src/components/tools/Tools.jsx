@@ -1,13 +1,12 @@
-import React, { forwardRef, useState } from 'react'
+import React from 'react'
 
 export default function Tools({tool, setTool}) {
 
- 
-  const handleTool = (e) => {
-    
+ const handleTool = (e) => {
     setTool(e.target.value)
- 
   }
+
+
   const tools = [
     "Pen",
     "Ellipse",
@@ -20,13 +19,14 @@ export default function Tools({tool, setTool}) {
     "Drag",
     "StageMove"
   ]
+
+
   return (
     <div>
       <select  value={tool} onChange={(handleTool)}>
          {tools.map((toolsIten, index) => {
         
            return (
-            
             <option value={toolsIten} key={index}  > 
             {toolsIten}
             </option>
