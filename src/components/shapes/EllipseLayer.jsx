@@ -30,7 +30,8 @@ function EllipseLayer({ tool, transform}, refs) {
   const handleEllipseDown = (e) => {
   
      isDrawing.current = true
-     const pos = e.target.getStage().getPointerPosition()
+     const pos = e.target.getStage().getRelativePointerPosition()
+     console.log(pos)
      setEllipses([...ellipses, { x:pos.x, y:pos.y, radiusX : 0, radiusY : 0}])
   }
 
@@ -38,11 +39,12 @@ function EllipseLayer({ tool, transform}, refs) {
   const handleEllipseMove =  (e) => {
      if(!isDrawing.current) return
     
-     const pos = e.target.getStage().getPointerPosition()
+     const pos = e.target.getStage().getRelativePointerPosition()
+    
      const lastEllipse = ellipses[ellipses.length - 1]
      lastEllipse.radiusY =Math.abs(lastEllipse.y- pos.y  )
+     console.log(e.target)
      lastEllipse.radiusX =Math.abs(lastEllipse.x- pos.x) 
-
      ellipses.splice(ellipses.length -1 , 1 , lastEllipse)
      setEllipses(ellipses.concat())
     }
@@ -79,6 +81,7 @@ useImperativeHandle(ellipseRef,() => ({
             strokeWidth={2}
             draggable={drag}
             onClick={tool==="Drag" ? transform: null}
+            
           />
         );
       })}

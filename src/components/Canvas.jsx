@@ -1,11 +1,15 @@
 import React, { useEffect, useRef,useState  } from 'react'
 import {Stage , Layer, Text} from "react-konva"
-import {ArrowLayer, DiamondLayer, EllipseLayer, PenLayer, RectangleLayer,Tools } from "../components/index"
+import {ArrowLayer, DiamondLayer, EllipseLayer, PenLayer, RectangleLayer,Tools} from "../components/index"
 
 
 export default function Canvas() {
 
   const [tool, setTool] = useState("Pen")
+ 
+
+ 
+ 
  
   const [dragStage, setDragStage] = useState(false)
   const penRef = useRef(null)
@@ -14,6 +18,8 @@ export default function Canvas() {
   const ellipseRef = useRef(null)
   const diamondRef = useRef(null)
   const trRef = useRef(null)
+
+ 
 
   const handleDown = (e) => {
 
@@ -96,28 +102,58 @@ const transform = (e) => {
 }
 
 
+const handleDragMove = () => {
+  const stage = stageRef.current;
+  
+};
+
+const handleWheel = (e) => {
+  e.evt.preventDefault();
+  const scaleBy = 1.05;
+  const stage = stageRef.current;
+  const oldScale = stage.scaleX();
+  const pointer = stage.getPointerPosition();
+  const newScale = e.evt.deltaY > 0 ? oldScale * scaleBy : oldScale / scaleBy;
+
+  stage.scale({ x: newScale, y: newScale });
+  stage.position({
+    x: pointer.x - (pointer.x - stage.position().x) * (newScale / oldScale),
+    y: pointer.y - (pointer.y - stage.position().y) * (newScale / oldScale),
+  });
+  stage.batchDraw();
+};
+
+
+
 
 return (
   <div>
     <Stage
-     width={window.innerWidth} 
+   
+     width={window.innerWidth } 
      height={window.innerHeight}
      onMouseDown={handleDown}
-     onMouseMove={handleMove}
+     onMouseMove={handleMove }
      onMouseUp={handleUp}
      onClick={removeTransform}
      draggable={dragStage}
+    
+    
+
     >
         <Layer>
-          <Text text="JusisDrawingt start drawing" x={5} y={30} />
+          <Text text="Just start Drawing" x={5} y={30} />
         </Layer>
-        <Layer>
-          <PenLayer tool={tool}  ref={{penRef, trRef}} transform={transform}/>
+        <Layer id="drawingLayer">
+          <PenLayer tool={tool}  ref={{penRef, trRef }} transform={transform} />
           <ArrowLayer  tool={tool} ref={{arrowRef, trRef}} transform={transform} />
           <RectangleLayer tool={tool}  ref={{rectangleRef, trRef}} transform={transform}/>
           <EllipseLayer tool={tool}  ref={{ellipseRef, trRef}} transform={transform}/>
           <DiamondLayer tool={tool}  ref={{diamondRef, trRef}} transform={transform}/>
         </Layer>
+    
+    {/* <Eraser stageRef={ stageRef}></Eraser> */}
+
     </Stage>
 
      <Tools  tool={tool} setTool={setTool} />

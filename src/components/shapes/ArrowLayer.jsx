@@ -27,14 +27,14 @@ const ArrowLayer = ({ tool, transform}, refs ) => {
   const handleArrowDown = (e) => {
   
    isDrawing.current = true;
-   const pos = e.target.getStage().getPointerPosition();
+   const pos = e.target.getStage().getRelativePointerPosition();
    setArrows([...arrows, { points: [pos.x, pos.y, pos.x, pos.y] }]);
  };
 
 
  const handleArrowMove = (e) => {
    if (!isDrawing.current) return;
-   const pos = e.target.getStage().getPointerPosition();
+   const pos = e.target.getStage().getRelativePointerPosition();
    const newArrows = [...arrows];
    const lastArrow = newArrows[newArrows.length - 1];
    lastArrow.points = [lastArrow.points[0], lastArrow.points[1], pos.x, pos.y];

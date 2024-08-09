@@ -1,7 +1,7 @@
 
 import React, {useState , useEffect, forwardRef, useImperativeHandle, useRef} from 'react'
 import { Group, Rect, Transformer } from 'react-konva'
-import DiamondLayer from './DiamondLayer'
+
 
 function RectangleLayer({ tool, transform}, refs) {
 
@@ -26,9 +26,10 @@ function RectangleLayer({ tool, transform}, refs) {
  
 
 
+
   const handleRectangleDown = (e) => {
         isDrawing.current = true
-        const pos = e.target.getStage().getPointerPosition()
+        const pos = e.target.getStage().getRelativePointerPosition()
         setRectangles([...rectangles, {x: pos.x, y: pos.y, width: 0 , height: 0 }])
     }
      
@@ -37,7 +38,7 @@ function RectangleLayer({ tool, transform}, refs) {
          return
        }
      
-       const pos = e.target.getStage().getPointerPosition()
+       const pos = e.target.getStage().getRelativePointerPosition()
        let lastRectangle = rectangles[rectangles.length -1]
        lastRectangle.height = pos.y - lastRectangle.y
        lastRectangle.width = pos.x - lastRectangle.x
@@ -76,7 +77,9 @@ function RectangleLayer({ tool, transform}, refs) {
                        fill="pink"
                        draggable={drag}
                        onClick={tool==="Drag" ? transform: null}
-                      />
+                      
+                       
+                      /> 
               ) }))}
 
        <Transformer

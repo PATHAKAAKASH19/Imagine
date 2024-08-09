@@ -2,13 +2,14 @@
 import React, {useState, useEffect, forwardRef, useRef, useImperativeHandle} from 'react'
 import { Group, Line, Transformer } from 'react-konva'
 
-function PenLayer({ tool , transform}, refs) {
+function PenLayer({ tool , transform }, refs) {
 
 
   const {penRef, trRef} = refs
   const [drag , setDrag] = useState(false)
   const [lines, setLines] = useState([])
- 
+
+  const groupRef = useRef(null)
   const isDrawing = useRef(false);
 
 
@@ -23,14 +24,17 @@ function PenLayer({ tool , transform}, refs) {
   } , [lines, tool])
 
 
+  
 
- 
+
 
 
   const handlePenDown = (e) => {
       isDrawing.current = true
-      const pos = e.target.getStage().getPointerPosition()
-      setLines([...lines, { points:[pos.x, pos.y] }])
+      const pos1 = e.target.getStage().getRelativePointerPosition()
+      
+      
+      setLines([...lines, { points:[pos1.x , pos1.y] }])
     }
 
     const handlePenMove = (e) => {
@@ -38,10 +42,15 @@ function PenLayer({ tool , transform}, refs) {
         return
        }
 
-      const pos = e.target.getStage().getPointerPosition();
+     
+      const pos = e.target.getStage().getRelativePointerPosition();
+     
+
+     
       let lastLine = lines[lines.length - 1];
       lastLine.points = lastLine.points.concat([pos.x, pos.y])
       lines.splice( lines.length -1, 1, lastLine)
+    
       setLines(lines.concat())
     }
 
@@ -62,11 +71,12 @@ function PenLayer({ tool , transform}, refs) {
  
    
   return (
-    <Group>
-     
+ 
+    <Group ref={groupRef}>
        {lines.map((line, index) => {
          
         return (<Line
+        
            key={index}
            points={line.points}
            stroke="#f55442"
@@ -76,6 +86,8 @@ function PenLayer({ tool , transform}, refs) {
            lineJoin="round"
            draggable={drag}
            onClick={tool==="Drag" ? transform: null}
+          
+         
          />)
       })}
     
@@ -90,7 +102,7 @@ function PenLayer({ tool , transform}, refs) {
        scaleEnabled={true}
        skewEnabled={true}
       />
-    </Group>
+      </Group>
   )
 }
 
