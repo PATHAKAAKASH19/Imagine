@@ -1,6 +1,6 @@
 import React, { useEffect, useRef,useState  } from 'react'
 import {Stage , Layer, Text} from "react-konva"
-import {ArrowLayer, DiamondLayer, EllipseLayer, PenLayer, RectangleLayer, Tools} from "../components/index"
+import {ArrowLayer, DiamondLayer, EllipseLayer, ImageLayer, PenLayer, RectangleLayer, Tools} from "../components/index"
 
 
 export default function Canvas() {
@@ -153,6 +153,7 @@ return (
           <RectangleLayer tool={tool}  ref={{rectangleRef, trRef}} transform={transform}/>
           <EllipseLayer tool={tool}  ref={{ellipseRef, trRef}} transform={transform}/>
           <DiamondLayer tool={tool}  ref={{diamondRef, trRef}} transform={transform}/>
+          <ImageLayer  tool={tool} />
         </Layer>
     
     {/* <Eraser stageRef={ stageRef}></Eraser> */}
