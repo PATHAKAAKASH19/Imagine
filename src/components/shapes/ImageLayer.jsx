@@ -1,55 +1,39 @@
 import React from 'react'
 import { useState } from 'react'
-import {Image, Layer} from "react-konva"
-import {Html} from "react-konva-utils"
+import {Group, Image, Layer} from "react-konva"
+import useImage from "use-image"
 
-export default function ImageLayer({tool}) {
+export default function ImageLayer() {
   
-  const [images, setImages] = useState([])
+  const [image, setImage] = useState(null);
+  const [img] = useImage(image); // Use the image URL with the useImage hook
+  const fileInputRef = useRef(null);
 
-  const handleFileUpload = (e) => {
-      const file = e.target.files[0]
-      if(file){
-        const reader = new FileReader()
-        reader.onload = (event) => {
-          const img = new window.Image()
-          img.src = event.target.result
-          img.onload = () => {
-            setImages([...images, { src:img, width:img.width ,height:img.height}])
-          }
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImage(reader.result); // Set the image data URL to state
+      };
+      reader.readAsDataURL(file); // Read the file as a data URL
+    }
+  };
+  return (
+    <Group>
+      {img && (
+            <Image
+              image={img}
+              x={50}
+              y={50}
+              width={200}
+              height={200}
+              draggable
+            />
+          )}
+    </Group>
+  )
 
-          reader.readAsDataURL(file)
-        }
-      }
-  } 
-
-
-  {tool==="Image" ?  (
-   <Layer>
-    <Html
-      divProps={{
-        style: {
-          position: 'absolute',
-          top: 10,
-          left: 10,
-        },
-      }}
-    > 
-      <input type="file" accept='image/' onChang={handleFileUpload} placeholder='askkkkjjhgfg' />
-    </Html>
-      { images && images.map((image, index) => {
-       
-       return (<Image
-        key={index}
-         image={image.src}
-         x={20}
-         y={20}
-         width={image.width}
-         height={image.height}
-         draggable={true}
-        
-        />
-      )})}
-   </Layer>
-  ): null}
 }
+
+ 
