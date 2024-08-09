@@ -1,6 +1,6 @@
 import React, { useEffect, useRef,useState  } from 'react'
 import {Stage , Layer, Text} from "react-konva"
-import {ArrowLayer, DiamondLayer, EllipseLayer, PenLayer, RectangleLayer,Image, Tools} from "../components/index"
+import {ArrowLayer, DiamondLayer, EllipseLayer, PenLayer, RectangleLayer, Tools} from "../components/index"
 
 
 export default function Canvas() {
