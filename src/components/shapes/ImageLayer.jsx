@@ -27,7 +27,7 @@ export default function ImageLayer({tool}) {
 
   useEffect(() => {
     setImages([...images , {img: image}])
-  }, [imageUrl])
+  }, [image])
 
 
   useEffect(() => {
