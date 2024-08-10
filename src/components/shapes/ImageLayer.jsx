@@ -26,9 +26,9 @@ import {Html} from "react-konva-utils"
   };
 
   useEffect(() => {
-    if(images){
+    if(image){
     setImages([...images , {img: image}])}
-  }, [images])
+  }, [image])
 
 
   useEffect(() => {
