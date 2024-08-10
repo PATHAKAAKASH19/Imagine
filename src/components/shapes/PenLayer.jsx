@@ -8,8 +8,6 @@ function PenLayer({ tool , transform }, refs) {
   const {penRef, trRef} = refs
   const [drag , setDrag] = useState(false)
   const [lines, setLines] = useState([])
-
-  const groupRef = useRef(null)
   const isDrawing = useRef(false);
 
 
@@ -21,7 +19,7 @@ function PenLayer({ tool , transform }, refs) {
     }else{
       setDrag(false)
     }
-  } , [lines, tool])
+  } , [ tool])
 
 
   
@@ -31,10 +29,10 @@ function PenLayer({ tool , transform }, refs) {
 
   const handlePenDown = (e) => {
       isDrawing.current = true
-      const pos1 = e.target.getStage().getRelativePointerPosition()
+      const pos = e.target.getStage().getRelativePointerPosition()
+      console.log(pos)
       
-      
-      setLines([...lines, { points:[pos1.x , pos1.y] }])
+      setLines([...lines, { points:[pos.x , pos.y] }])
     }
 
     const handlePenMove = (e) => {
@@ -45,7 +43,7 @@ function PenLayer({ tool , transform }, refs) {
      
       const pos = e.target.getStage().getRelativePointerPosition();
      
-
+     console.log(pos)
      
       let lastLine = lines[lines.length - 1];
       lastLine.points = lastLine.points.concat([pos.x, pos.y])
@@ -72,7 +70,7 @@ function PenLayer({ tool , transform }, refs) {
    
   return (
  
-    <Group ref={groupRef}>
+    <Group >
        {lines.map((line, index) => {
          
         return (<Line

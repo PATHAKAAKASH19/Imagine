@@ -1,10 +1,10 @@
-import React, { useEffect, useRef } from 'react'
-import { useState } from 'react'
-import {Group, Image, Layer} from "react-konva"
+import React, { forwardRef, useEffect, useRef, useState} from 'react'
+import { Image, Layer, Transformer } from "react-konva"
 import useImage from "use-image"
 import {Html} from "react-konva-utils"
 
-export default function ImageLayer({tool}) {
+
+ function ImageLayer({tool , transform} , trRef) {
   
   const [imageUrl, setImageUrl] = useState(null);
   const [image] = useImage(imageUrl); // Use the image URL with the useImage hook
@@ -26,8 +26,9 @@ export default function ImageLayer({tool}) {
   };
 
   useEffect(() => {
-    setImages([...images , {img: image}])
-  }, [image])
+    if(images){
+    setImages([...images , {img: image}])}
+  }, [images])
 
 
   useEffect(() => {
@@ -38,12 +39,15 @@ export default function ImageLayer({tool}) {
     }
   }, [tool])
   
-  return (    <Group>
+  return (   
+    
+    
+    <Layer>
         
         
          <Html>
           <input type='file' accept='image/' onChange={handleFileChange} style={{display: 'none'}} ref={inputRef}/>
-        </Html>
+         </Html>
       { images.map((image , index) => 
             (
             <Image
@@ -51,14 +55,31 @@ export default function ImageLayer({tool}) {
               image={image.img}
               x={50}
               y={50}
-              width={2000}
-              height={2000}
+              width={200}
+              height={200}
               draggable
+              onClick={transform}
             />))}
+
+
+          <Transformer
+          ref={trRef}
+          anchorStyleFunc={ (anchor)  =>{
+            anchor.cornerRadius(10);
+          }
+        }
+          rotateEnabled={true}
+          resizeEnabled={true}
+          scaleEnabled={true}
+          skewEnabled={true}
+         
+          />
           
-    </Group>
+    </Layer>
   
 
             )
 }
+
+export default forwardRef(ImageLayer)
  

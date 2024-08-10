@@ -102,27 +102,6 @@ const transform = (e) => {
 }
 
 
-const handleDragMove = () => {
-  const stage = stageRef.current;
-  
-};
-
-const handleWheel = (e) => {
-  e.evt.preventDefault();
-  const scaleBy = 1.05;
-  const stage = stageRef.current;
-  const oldScale = stage.scaleX();
-  const pointer = stage.getPointerPosition();
-  const newScale = e.evt.deltaY > 0 ? oldScale * scaleBy : oldScale / scaleBy;
-
-  stage.scale({ x: newScale, y: newScale });
-  stage.position({
-    x: pointer.x - (pointer.x - stage.position().x) * (newScale / oldScale),
-    y: pointer.y - (pointer.y - stage.position().y) * (newScale / oldScale),
-  });
-  stage.batchDraw();
-};
-
 
 
 
@@ -147,16 +126,18 @@ return (
         <Layer>
           <Text text="Just start Drawing" x={5} y={30} />
         </Layer>
+
+        <ImageLayer tool={tool} ref={trRef} transform={transform} ></ImageLayer>
         <Layer id="drawingLayer">
           <PenLayer tool={tool}  ref={{penRef, trRef }} transform={transform} />
-          <ArrowLayer  tool={tool} ref={{arrowRef, trRef}} transform={transform} />
-          <RectangleLayer tool={tool}  ref={{rectangleRef, trRef}} transform={transform}/>
           <EllipseLayer tool={tool}  ref={{ellipseRef, trRef}} transform={transform}/>
+          <RectangleLayer tool={tool}  ref={{rectangleRef, trRef}} transform={transform}/>
+          <ArrowLayer  tool={tool} ref={{arrowRef, trRef}} transform={transform} />
           <DiamondLayer tool={tool}  ref={{diamondRef, trRef}} transform={transform}/>
-          <ImageLayer  tool={tool} />
+          
         </Layer>
     
-    {/* <Eraser stageRef={ stageRef}></Eraser> */}
+      
 
     </Stage>
 
