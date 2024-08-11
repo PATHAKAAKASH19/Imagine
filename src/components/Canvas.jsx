@@ -1,17 +1,13 @@
 import React, { useEffect, useRef,useState  } from 'react'
 import {Stage , Layer, Text} from "react-konva"
-import {ArrowLayer, DiamondLayer, EllipseLayer, ImageLayer, PenLayer, RectangleLayer, TextLayer,Tools, Eraser} from "../components/index"
+import {ArrowLayer, DiamondLayer, EllipseLayer, ImageLayer, PenLayer, RectangleLayer, Tools} from "../components/index"
 
 
 export default function Canvas() {
 
   const [tool, setTool] = useState("Pen")
-  const [eraser, setEraser] = useState({x:200, y:200,radius: 10 })
-
- 
- 
- 
   const [dragStage, setDragStage] = useState(false)
+
   const penRef = useRef(null)
   const rectangleRef = useRef(null)
   const arrowRef = useRef(null)
@@ -19,6 +15,7 @@ export default function Canvas() {
   const diamondRef = useRef(null)
   const trRef = useRef(null)
   const stageRef = useRef(null)
+ 
  
  
 
@@ -107,9 +104,7 @@ const transform = (e) => {
 
 
 
-const Erase = () => {
 
-}
 
 
 
@@ -129,8 +124,6 @@ return (
      onClick={removeTransform}
      draggable={dragStage}
      ref={stageRef}
-    
-
     >
         <Layer>
           <Text text="Just start Drawing" x={5} y={30} />
@@ -138,17 +131,12 @@ return (
 
         <ImageLayer tool={tool} ref={trRef} transform={transform} ></ImageLayer>
         <Layer id="drawingLayer">
-          <PenLayer tool={tool}  ref={{penRef, trRef, stageRef }} transform={transform} eraser={eraser} setEraser={setEraser}/>
-          <EllipseLayer tool={tool}  ref={{ellipseRef, trRef , stageRef}} transform={transform} eraser={eraser} setEraser={setEraser}/>
-          <RectangleLayer tool={tool}  ref={{rectangleRef, trRef}} transform={transform} eraser={eraser} setEraser={setEraser}/>
-          <ArrowLayer  tool={tool} ref={{arrowRef, trRef}} transform={transform} eraser={eraser} setEraser={setEraser} />
-          <DiamondLayer tool={tool}  ref={{diamondRef, trRef}} transform={transform} eraser={eraser} setEraser={setEraser}/>
-        
-
+          <PenLayer tool={tool}  ref={{penRef, trRef}} transform={transform} stageRef={stageRef}/>
+          <EllipseLayer tool={tool}  ref={{ellipseRef, trRef}} transform={transform} stageRef={stageRef}/>
+          <RectangleLayer tool={tool}  ref={{rectangleRef, trRef}} transform={transform}  stageRef={stageRef}/>
+          <ArrowLayer  tool={tool} ref={{arrowRef, trRef}} transform={transform}  stageRef={stageRef}/>
+          <DiamondLayer tool={tool}  ref={{diamondRef, trRef}} transform={transform} stageRef={stageRef}/>
         </Layer>
-    
-        {tool === "Eraser" && <Eraser eraser={eraser} setEraser={setEraser}></Eraser>}
-      
     </Stage>
 
      <Tools  tool={tool} setTool={setTool} />

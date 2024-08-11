@@ -2,7 +2,7 @@ import React, { useEffect, useState , forwardRef, useImperativeHandle, useRef} f
 import { Group, RegularPolygon, Transformer} from "react-konva"
 
 
- function DiamondLayer({tool, transform}, refs) {
+ function DiamondLayer({tool, transform, stageRef}, refs) {
 
  const {diamondRef, trRef} = refs
  const [drag, setDrag] = useState(false)
@@ -60,6 +60,42 @@ useImperativeHandle(diamondRef, () => ({
   handleDiamondUp
   
 }))
+
+
+useEffect(() => {
+
+  const stage = stageRef.current
+
+  if(tool === "Eraser"){
+
+   const handleErase = (e) => {
+     const pos = e.target.getStage().getRelativePointerPosition()
+     
+     setDiamonds(shapes => shapes.filter(shape => {
+
+      const diamond = shape
+      const isIntersecting =
+      pos.x > diamond.x &&
+      pos.x < diamond.x + diamond.radius &&
+      pos.y > diamond.y &&
+      pos.y < diamond.y + diamond.radius;
+      return !isIntersecting;
+    }))
+   }
+
+
+
+
+    stage.on("mousemove", handleErase)
+
+    return () => {
+      stage.off("mouseover", handleErase)
+    }
+  }
+
+
+ 
+} , [tool])
 
  
   return (
