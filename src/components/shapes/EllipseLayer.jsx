@@ -3,9 +3,9 @@ import React, { useEffect, useState, forwardRef, useRef, useImperativeHandle} fr
 import { Ellipse, Transformer, Group } from "react-konva";
 
 
-function EllipseLayer({ tool, transform}, refs) {
+function EllipseLayer({ tool, transform, eraser, serEraser}, refs) {
 
- const {ellipseRef, trRef} = refs
+ const {ellipseRef, trRef, stageRef} = refs
   const [drag , setDrag] = useState(false)
   const [ellipses, setEllipses] = useState([])
   
@@ -22,16 +22,14 @@ function EllipseLayer({ tool, transform}, refs) {
   } , [ellipses, tool])
 
 
-  
 
-
-  
+ 
 
   const handleEllipseDown = (e) => {
   
      isDrawing.current = true
      const pos = e.target.getStage().getRelativePointerPosition()
-     console.log(pos)
+   
      setEllipses([...ellipses, { x:pos.x, y:pos.y, radiusX : 0, radiusY : 0}])
   }
 
@@ -43,7 +41,7 @@ function EllipseLayer({ tool, transform}, refs) {
     
      const lastEllipse = ellipses[ellipses.length - 1]
      lastEllipse.radiusY =Math.abs(lastEllipse.y- pos.y  )
-     console.log(e.target)
+     
      lastEllipse.radiusX =Math.abs(lastEllipse.x- pos.x) 
      ellipses.splice(ellipses.length -1 , 1 , lastEllipse)
      setEllipses(ellipses.concat())
@@ -64,7 +62,42 @@ useImperativeHandle(ellipseRef,() => ({
 
 }))
   
+
+
+useEffect(() => {
+  const stage = stageRef.current
   
+  if(tool === "Eraser") {
+   const eraseEllipse = (e) => {
+    const pos = e.target.getStage().getRelativePointerPosition()
+
+      console.log("ne")
+    setEllipses(shapes => shapes.filter((shape) => {
+      const ellipse = shape;
+      const dx = pos.x - ellipse.x;
+      const dy = pos.y - ellipse.y;
+      return (Math.sqrt(dx * dx + dy * dy) > ellipse.radiusX)
+    }
+    
+    ))
+   }
+  
+  
+    stage.on("mousemove", eraseEllipse)
+  
+    return () => {
+      stage.off("mousemove" , eraseEllipse)
+    }}
+  
+  }, [eraser, tool])
+    
+
+
+
+
+
+
+
   return (
     <Group>
       {   ellipses.map((ellipse, index) => {
@@ -81,13 +114,13 @@ useImperativeHandle(ellipseRef,() => ({
             strokeWidth={2}
             draggable={drag}
             onClick={tool==="Drag" ? transform: null}
-            
+           
           />
         );
       })}
 
       <Transformer
-       anchorStyleFunc={ (anchor)  =>{
+       anchorStyleFunc={ (anchor)  => {
                    anchor.cornerRadius(10);}
                   }
        ref={trRef}

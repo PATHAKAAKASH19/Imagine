@@ -6,6 +6,6 @@ import EllipseLayer from './shapes/EllipseLayer'
 import TextLayer from './shapes/TextLayer'
 import DiamondLayer from "./shapes/DiamondLayer"
 import ImageLayer from "./shapes/ImageLayer"
-// import Eraser from './shapes/Eraser'
+import Eraser from './shapes/Eraser'
 
-export  {ArrowLayer, Tools, RectangleLayer, PenLayer, EllipseLayer, TextLayer,  DiamondLayer, ImageLayer}
+export  {ArrowLayer, Tools, RectangleLayer, PenLayer, EllipseLayer, TextLayer,  DiamondLayer, ImageLayer, Eraser}
