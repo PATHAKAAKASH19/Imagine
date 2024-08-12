@@ -3,9 +3,9 @@ import React, { useEffect, useState, forwardRef, useRef, useImperativeHandle} fr
 import { Ellipse, Transformer, Group } from "react-konva";
 
 
-function EllipseLayer({ tool, transform, stageRef}, refs) {
+function EllipseLayer({ tool, transform}, refs) {
 
- const {ellipseRef, trRef} = refs
+ const {ellipseRef, trRef, stageRef} = refs
   const [drag , setDrag] = useState(false)
   const [ellipses, setEllipses] = useState([])
   
@@ -65,10 +65,14 @@ useImperativeHandle(ellipseRef,() => ({
 
 
 useEffect(() => {
-  const stage = stageRef.current
   
-  if(tool === "Eraser") {
+
+  if(tool === "Eraser" && stageRef.current) {
+    
+    const stage = stageRef.current
+
     const handleErase = (e) => {
+    
     const pos = e.target.getStage().getRelativePointerPosition()
 
      

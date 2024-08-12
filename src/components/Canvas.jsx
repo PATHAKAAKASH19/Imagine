@@ -131,11 +131,11 @@ return (
 
         <ImageLayer tool={tool} ref={trRef} transform={transform} ></ImageLayer>
         <Layer id="drawingLayer">
-          <PenLayer tool={tool}  ref={{penRef, trRef}} transform={transform} stageRef={stageRef}/>
-          <EllipseLayer tool={tool}  ref={{ellipseRef, trRef}} transform={transform} stageRef={stageRef}/>
-          <RectangleLayer tool={tool}  ref={{rectangleRef, trRef}} transform={transform}  stageRef={stageRef}/>
-          <ArrowLayer  tool={tool} ref={{arrowRef, trRef}} transform={transform}  stageRef={stageRef}/>
-          <DiamondLayer tool={tool}  ref={{diamondRef, trRef}} transform={transform} stageRef={stageRef}/>
+          <PenLayer tool={tool}  ref={{penRef, trRef, stageRef}} transform={transform} />
+          <EllipseLayer tool={tool}  ref={{ellipseRef, trRef, stageRef} } transform={transform} />
+          <RectangleLayer tool={tool}  ref={{rectangleRef, trRef, stageRef}} transform={transform}  />
+          <ArrowLayer  tool={tool} ref={{arrowRef, trRef, stageRef}} transform={transform}  />
+          <DiamondLayer tool={tool}  ref={{diamondRef, trRef, stageRef}} transform={transform} />
         </Layer>
     </Stage>
 

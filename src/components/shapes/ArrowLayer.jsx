@@ -1,9 +1,9 @@
 import React, { useState, useEffect, forwardRef, useRef, useImperativeHandle} from 'react';
 import { Group, Arrow ,Transformer} from 'react-konva';
 
-const ArrowLayer = ({ tool, transform, stageRef}, refs ) => {
+const ArrowLayer = ({ tool, transform}, refs ) => {
   
-  const {arrowRef, trRef} = refs
+  const {arrowRef, trRef, stageRef} = refs
   const [drag , setDrag] = useState(false)
   const [arrows, setArrows] = useState([])
   const isDrawing = useRef(false);
@@ -53,47 +53,44 @@ useImperativeHandle(arrowRef,() => ({
 
 
 
-const isPointInArrow = (point, arrow) => {
-
-  const { points } = arrow;
-  const [x1, y1, x2, y2] = points;
-
- 
-  const distanceToLine = (x1, y1, x2, y2, px, py) => {
-    const lineLength = Math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2);
-    if (lineLength === 0) return Math.sqrt((px - x1) ** 2 + (py - y1) ** 2);
-    const t = ((px - x1) * (x2 - x1) + (py - y1) * (y2 - y1)) / lineLength ** 2;
-    const tx = t < 0 ? x1 : t > 1 ? x2 : x1 + t * (x2 - x1);
-    const ty = t < 0 ? y1 : t > 1 ? y2 : y1 + t * (y2 - y1);
-    return Math.sqrt((px - tx) ** 2 + (py - ty) ** 2);
-  };
-
-  const distance = distanceToLine(x1, y1, x2, y2, point.x, point.y);
-  return distance <= arrow.strokeWidth() / 2;
-};
-
- useEffect(() => {
-
-   const stage = stageRef.current
-
-   if(tool === "Eraser") {
-   const handleErase = (e) => {
+useEffect(() => {
+    
+  const stage = stageRef.current
+  if(tool === "Eraser" && stageRef.current) {
+  
+    const handleErase = (e) => {
+      
+      
     const pos = e.target.getStage().getRelativePointerPosition()
 
-    setArrows(shapes => shapes.filter(shape => {
-      const arrow = shape
-      return !isPointInArrow(pos, arrow)
-    }))
+     
+    setArrows(shapes => shapes.filter((shape) => {
+      const arrow = shape;
+      const arrowBounds = {
+        x: Math.min(arrow.points[0], arrow.points[2]),
+        y: Math.min(arrow.points[1], arrow.points[3]),
+        width: Math.max(arrow.points[0], arrow.points[2]) - Math.min(arrow.points[0], arrow.points[2]),
+        height: Math.max(arrow.points[1], arrow.points[3]) - Math.min(arrow.points[1], arrow.points[3]),
+      };
 
-   }
-   stage.on("mouseover", handleErase)
+      const intersects =
+      (pos.x > arrowBounds.x + arrowBounds.width ||
+        pos.x  < arrowBounds.x ||
+        pos.y > arrowBounds.y + arrowBounds.height ||
+        pos.y < arrowBounds.y);
 
-   return () => {
-    stage.off("mouseover", handleErase)
-   }}
-
-  }, [tool])
-
+    return intersects;
+      }))
+  }
+  
+  
+    stage.on("mousemove", handleErase)
+  
+    return () => {
+      stage.off("mousemove" , handleErase)
+    }}
+  
+  }, [ tool])
 
 
     return (

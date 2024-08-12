@@ -3,9 +3,9 @@ import React, {useState , useEffect, forwardRef, useImperativeHandle, useRef} fr
 import { Group, Rect, Transformer } from 'react-konva'
 
 
-function RectangleLayer({ tool, transform, stageRef}, refs) {
+function RectangleLayer({ tool, transform }, refs) {
 
-  const {rectangleRef, trRef} = refs
+  const {rectangleRef, trRef, stageRef} = refs
   const [rectangles, setRectangles] = useState([])
   const [drag , setDrag] = useState(false)
   
@@ -22,8 +22,7 @@ function RectangleLayer({ tool, transform, stageRef}, refs) {
 
 
   
-
- 
+  
 
 
 
@@ -61,43 +60,47 @@ function RectangleLayer({ tool, transform, stageRef}, refs) {
     }))
 
 
+    useEffect(() => {
+    
+      const stage = stageRef.current
+      if(tool === "Eraser" && stageRef.current) {
+      
+        const handleErase = (e) => {
+          
+          
+        const pos = e.target.getStage().getRelativePointerPosition()
+    
+         
+        setRectangles(shapes => shapes.filter((shape) => {
+          const rect = shape;
+               
+  
+                const intersects = !(
+                  pos.x > rect.x + rect.width ||
+                  pos.x  < rect.x ||
+                  pos.y > rect.y + rect.height ||
+                  pos.y  < rect.y
+                );
+  
+                return !intersects;
+              }
+            ))
+        
+      
+       }
+      
+      
+        stage.on("mousemove", handleErase)
+      
+        return () => {
+          stage.off("mousemove" , handleErase)
+        }}
+      
+      }, [ tool])
+   
 
 
 
-useEffect(() => {
-
-  const stage = stageRef.current
-
-  if(tool === "Eraser"){
-
-   const handleErase = (e) => {
-     const pos = e.target.getStage().getRelativePointerPosition()
-     
-     setRectangles(shapes => shapes.filter(shape => {
-
-      const rect = shape
-      const isIntersecting =
-      pos.x > rect.x &&
-      pos.x < rect.x + rect.width &&
-      pos.y > rect.y &&
-      pos.y < rect.y + rect.height;
-      return isIntersecting;
-    }))
-   }
-
-
-
-
-    stage.on("mousemove", handleErase)
-
-    return () => {
-      stage.off("mouseover", handleErase)
-    }
-  }
-
-
- 
-} , [tool])
 
 
  return (

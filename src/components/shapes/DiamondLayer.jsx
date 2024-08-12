@@ -2,9 +2,9 @@ import React, { useEffect, useState , forwardRef, useImperativeHandle, useRef} f
 import { Group, RegularPolygon, Transformer} from "react-konva"
 
 
- function DiamondLayer({tool, transform, stageRef}, refs) {
+ function DiamondLayer({tool, transform}, refs) {
 
- const {diamondRef, trRef} = refs
+ const {diamondRef, trRef, stageRef} = refs
  const [drag, setDrag] = useState(false)
  const [diamonds, setDiamonds] = useState([])
 
@@ -49,7 +49,7 @@ const handleDiamondMove = (e) => {
 
 
 const handleDiamondUp = () => {
-  isDrawing.current = false;
+  isDrawing.current = false; 
 };
 
 
@@ -62,42 +62,49 @@ useImperativeHandle(diamondRef, () => ({
 }))
 
 
+
+
+
 useEffect(() => {
-
+  
   const stage = stageRef.current
-
-  if(tool === "Eraser"){
-
-   const handleErase = (e) => {
-     const pos = e.target.getStage().getRelativePointerPosition()
+  if(tool === "Eraser" && stageRef.current) {
+   
+   
+    const handleErase = (e) => {
      
-     setDiamonds(shapes => shapes.filter(shape => {
+    const pos = e.target.getStage().getRelativePointerPosition()
 
-      const diamond = shape
-      const isIntersecting =
-      pos.x > diamond.x &&
-      pos.x < diamond.x + diamond.radius &&
-      pos.y > diamond.y &&
-      pos.y < diamond.y + diamond.radius;
-      return !isIntersecting;
-    }))
-   }
+     
+    setDiamonds(shapes => shapes.filter((shape) => {
+      const diamond = shape;
+      const intersects = (
+        pos.x > diamond.x + diamond.radius ||
+        pos.x < diamond.x - diamond.radius ||
+        pos.y > diamond.y + diamond.radius ||
+        pos.y < diamond.y - diamond.radius
+      );
 
-
-
-
-    stage.on("mousemove", handleErase)
-
-    return () => {
-      stage.off("mouseover", handleErase)
+      return intersects;
     }
-  }
+    
+    ))
+   }
+  
+  
+    stage.on("mousemove", handleErase)
+  
+    return () => {
+      stage.off("mousemove" , handleErase)
+    }}
+  
+  }, [ tool])
+    
 
 
- 
-} , [tool])
+  
 
- 
+
   return (
     <Group >
 
