@@ -1,10 +1,10 @@
-import React, { useEffect, useState , forwardRef, useImperativeHandle, useRef} from 'react'
+import React, { useEffect, useState , forwardRef, useRef} from 'react'
 import { Group, RegularPolygon, Transformer} from "react-konva"
 
 
  function DiamondLayer({tool, transform}, refs) {
 
- const {diamondRef, trRef, stageRef} = refs
+ const { trRef, stageRef} = refs
  const [drag, setDrag] = useState(false)
  const [diamonds, setDiamonds] = useState([])
 
@@ -53,16 +53,32 @@ const handleDiamondUp = () => {
 };
 
 
-useImperativeHandle(diamondRef, () => ({
+
+
+
+useEffect(() => {
   
-  handleDiamondDown,
-  handleDiamondMove,
-  handleDiamondUp
+  const stage = stageRef.current
+  if(tool === "Diamond" && stage){
+     
+
+
+
+
+    stage.on("mousedown" , handleDiamondDown)
+    stage.on("mousemove" , handleDiamondMove)
+    stage.on("mouseup" , handleDiamondUp)
+
+
+    return () => {
+      stage.off("mousedown" , handleDiamondDown)
+      stage.off("mousemove" , handleDiamondMove)
+      stage.off("mouseup" , handleDiamondUp)
   
-}))
+    }
+  }
 
-
-
+} , [tool , isDrawing, diamonds])
 
 
 useEffect(() => {

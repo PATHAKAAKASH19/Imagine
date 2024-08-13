@@ -1,9 +1,9 @@
-import React, { useState, useEffect, forwardRef, useRef, useImperativeHandle} from 'react';
+import React, { useState, useEffect, forwardRef, useRef, } from 'react';
 import { Group, Arrow ,Transformer} from 'react-konva';
 
 const ArrowLayer = ({ tool, transform}, refs ) => {
   
-  const {arrowRef, trRef, stageRef} = refs
+  const { trRef, stageRef} = refs
   const [drag , setDrag] = useState(false)
   const [arrows, setArrows] = useState([])
   const isDrawing = useRef(false);
@@ -43,14 +43,35 @@ const handleArrowDown = (e) => {
  };
 
 
- // To expose function to the parent component 
 
-useImperativeHandle(arrowRef,() => ({
-  handleArrowDown,
-  handleArrowMove,
-  handleArrowUp,
-}))
+useEffect(() => {
+  
+  const stage = stageRef.current
+  if(tool === "Arrow" && stage){
+     
 
+
+
+
+    stage.on("mousedown" , handleArrowDown)
+    stage.on("mousemove" , handleArrowMove)
+    stage.on("mouseup" , handleArrowUp)
+
+
+    return () => {
+      stage.off("mousedown" , handleArrowDown)
+      stage.off("mousemove" , handleArrowMove)
+      stage.off("mouseup" , handleArrowUp)
+  
+    }
+  }
+
+
+  
+
+
+
+} , [tool , isDrawing, arrows])
 
 
 useEffect(() => {

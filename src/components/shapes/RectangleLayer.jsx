@@ -1,11 +1,11 @@
 
-import React, {useState , useEffect, forwardRef, useImperativeHandle, useRef} from 'react'
+import React, {useState , useEffect, forwardRef, useRef} from 'react'
 import { Group, Rect, Transformer } from 'react-konva'
 
 
 function RectangleLayer({ tool, transform }, refs) {
 
-  const {rectangleRef, trRef, stageRef} = refs
+  const { trRef, stageRef} = refs
   const [rectangles, setRectangles] = useState([])
   const [drag , setDrag] = useState(false)
   
@@ -51,13 +51,32 @@ function RectangleLayer({ tool, transform }, refs) {
     }
 
 
-  useImperativeHandle(rectangleRef, () => ({
+ 
+
+    useEffect(() => {
+  
+      const stage = stageRef.current
+      if(tool === "Rectangle" && stage){
+         
+    
+    
+    
+    
+        stage.on("mousedown" , handleRectangleDown)
+        stage.on("mousemove" , handleRectangleMove)
+        stage.on("mouseup" , handleRectangleUp)
+    
+    
+        return () => {
+          stage.off("mousedown" , handleRectangleDown)
+          stage.off("mousemove" , handleRectangleMove)
+          stage.off("mouseup" , handleRectangleUp)
       
-        handleRectangleDown,
-        handleRectangleMove,
-        handleRectangleUp
-      
-    }))
+        }
+      }
+    
+    } , [tool , isDrawing, rectangles])
+    
 
 
     useEffect(() => {

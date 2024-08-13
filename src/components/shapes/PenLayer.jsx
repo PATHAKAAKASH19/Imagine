@@ -1,11 +1,11 @@
 
-import React, {useState, useEffect, forwardRef, useRef, useImperativeHandle} from 'react'
+import React, {useState, useEffect, forwardRef, useRef} from 'react'
 import { Group, Line, Transformer } from 'react-konva'
 
 function PenLayer({ tool , transform }, refs) {
 
 
-  const {penRef, trRef, stageRef} = refs
+  const { trRef, stageRef} = refs
   const [drag , setDrag] = useState(false)
   const [lines, setLines] = useState([])
   const isDrawing = useRef(false);
@@ -57,13 +57,33 @@ function PenLayer({ tool , transform }, refs) {
        isDrawing.current = false
     }
 
-    useImperativeHandle(penRef, () => ({
-        handlePenDown,
-        handlePenMove,
-        handlePenUp,
-       
+
+
+    useEffect(() => {
+  
+      const stage = stageRef.current
+      if(tool === "Pen" && stage){
+         
+    
+    
+    
+    
+        stage.on("mousedown" , handlePenDown)
+        stage.on("mousemove" , handlePenMove)
+        stage.on("mouseup" , handlePenUp)
+    
+    
+        return () => {
+          stage.off("mousedown" , handlePenDown)
+          stage.off("mousemove" , handlePenMove)
+          stage.off("mouseup" , handlePenUp)
+      
+        }
       }
-    ))
+    
+    } , [tool , isDrawing, lines])
+    
+   
 
 
 

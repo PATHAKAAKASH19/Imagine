@@ -1,11 +1,11 @@
 
-import React, { useEffect, useState, forwardRef, useRef, useImperativeHandle} from "react";
+import React, { useEffect, useState, forwardRef, useRef} from "react";
 import { Ellipse, Transformer, Group } from "react-konva";
 
 
 function EllipseLayer({ tool, transform}, refs) {
 
- const {ellipseRef, trRef, stageRef} = refs
+ const { trRef, stageRef} = refs
   const [drag , setDrag] = useState(false)
   const [ellipses, setEllipses] = useState([])
   
@@ -52,16 +52,30 @@ function EllipseLayer({ tool, transform}, refs) {
   }
 
 
-useImperativeHandle(ellipseRef,() => ({
 
+useEffect(() => {
   
-    handleEllipseDown,
-    handleEllipseMove,
-    handleEllipseUp
-  
+  const stage = stageRef.current
+  if(tool === "Ellipse" && stage){
+     
 
-}))
+
+
+
+    stage.on("mousedown" , handleEllipseDown)
+    stage.on("mousemove" , handleEllipseMove)
+    stage.on("mouseup" , handleEllipseUp)
+
+
+    return () => {
+      stage.off("mousedown" , handleEllipseDown)
+      stage.off("mousemove" , handleEllipseMove)
+      stage.off("mouseup" , handleEllipseUp)
   
+    }
+  }
+
+} , [tool , isDrawing, ellipses])
 
 
 useEffect(() => {
