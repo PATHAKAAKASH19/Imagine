@@ -1,3 +1,6 @@
-* {
-    overflow: hidden;
-}
+@media (max-width: 768px) {
+    .container {
+      background-color: green;
+      padding: 10px;
+    }
+  }

@@ -51,6 +51,7 @@ return (
      onClick={removeTransform}
      draggable={dragStage}
      ref={stageRef}
+     className='container'
 
     >
         <Layer>
