@@ -68,12 +68,17 @@ useEffect(() => {
     stage.on("mousedown" , handleDiamondDown)
     stage.on("mousemove" , handleDiamondMove)
     stage.on("mouseup" , handleDiamondUp)
-
+    stage.on("touchstart", handleDiamondDown)
+    stage.on("touchmove", handleDiamondMove)
+    stage.on("touchend", handleDiamondUp)
 
     return () => {
       stage.off("mousedown" , handleDiamondDown)
       stage.off("mousemove" , handleDiamondMove)
       stage.off("mouseup" , handleDiamondUp)
+      stage.off("touchstart", handleDiamondDown)
+      stage.off("touchmove", handleDiamondMove)
+      stage.off("touchend", handleDiamondUp)
   
     }
   }
@@ -109,8 +114,10 @@ useEffect(() => {
   
   
     stage.on("mousemove", handleErase)
+    stage.on("touchmove", handleErase)
   
     return () => {
+      stage.off("mousemove" , handleErase)
       stage.off("mousemove" , handleErase)
     }}
   
@@ -131,6 +138,7 @@ useEffect(() => {
                 x={diamond.x}
                 y={diamond.y}
                 sides={4}
+
                 radius={diamond.radius}
                 fill="pink"
                 stroke="black"

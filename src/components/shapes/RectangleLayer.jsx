@@ -65,12 +65,19 @@ function RectangleLayer({ tool, transform }, refs) {
         stage.on("mousedown" , handleRectangleDown)
         stage.on("mousemove" , handleRectangleMove)
         stage.on("mouseup" , handleRectangleUp)
+        stage.on("touchstart", handleRectangleDown)
+        stage.on("touchmove", handleRectangleMove)
+        stage.on("touchend", handleRectangleUp)
+    
     
     
         return () => {
           stage.off("mousedown" , handleRectangleDown)
           stage.off("mousemove" , handleRectangleMove)
           stage.off("mouseup" , handleRectangleUp)
+          stage.off("touchstart", handleRectangleDown)
+          stage.off("touchmove", handleRectangleMove)
+          stage.off("touchend", handleRectangleUp)
       
         }
       }
@@ -110,8 +117,10 @@ function RectangleLayer({ tool, transform }, refs) {
       
       
         stage.on("mousemove", handleErase)
+        stage.on("touchmove", handleErase)
       
         return () => {
+          stage.off("mousemove" , handleErase)
           stage.off("mousemove" , handleErase)
         }}
       

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, forwardRef, useRef, } from 'react';
 import { Group, Arrow ,Transformer} from 'react-konva';
 
-const ArrowLayer = ({ tool, transform}, refs ) => {
+const ArrowLayer = ({ tool, transform , saveHistory}, refs ) => {
   
   const { trRef, stageRef} = refs
   const [drag , setDrag] = useState(false)
@@ -35,11 +35,13 @@ const handleArrowDown = (e) => {
    lastArrow.points = [lastArrow.points[0], lastArrow.points[1], pos.x, pos.y];
    newArrows.splice(newArrows.length - 1, 1, lastArrow);
    setArrows(newArrows);
+   saveHistory()
  };
 
  
  const handleArrowUp = () => {
    isDrawing.current = false;
+
  };
 
 
@@ -56,12 +58,19 @@ useEffect(() => {
     stage.on("mousedown" , handleArrowDown)
     stage.on("mousemove" , handleArrowMove)
     stage.on("mouseup" , handleArrowUp)
+    stage.on("touchstart", handleArrowDown)
+    stage.on("touchmove", handleArrowMove)
+    stage.on("touchend", handleArrowUp)
+
 
 
     return () => {
       stage.off("mousedown" , handleArrowDown)
       stage.off("mousemove" , handleArrowMove)
       stage.off("mouseup" , handleArrowUp)
+      stage.off("touchstart", handleArrowDown)
+      stage.off("touchmove", handleArrowMove)
+      stage.off("touchend", handleArrowUp)
   
     }
   }
@@ -106,8 +115,10 @@ useEffect(() => {
   
   
     stage.on("mousemove", handleErase)
+    stage.on("touchmove", handleErase)
   
     return () => {
+      stage.off("mousemove" , handleErase)
       stage.off("mousemove" , handleErase)
     }}
   

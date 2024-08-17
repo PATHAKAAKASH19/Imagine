@@ -71,12 +71,19 @@ function PenLayer({ tool , transform }, refs) {
         stage.on("mousedown" , handlePenDown)
         stage.on("mousemove" , handlePenMove)
         stage.on("mouseup" , handlePenUp)
+        stage.on("touchstart", handlePenDown)
+        stage.on("touchmove", handlePenMove)
+        stage.on("touchend", handlePenUp)
+    
     
     
         return () => {
           stage.off("mousedown" , handlePenDown)
           stage.off("mousemove" , handlePenMove)
           stage.off("mouseup" , handlePenUp)
+          stage.off("touchstart", handlePenDown)
+          stage.off("touchmove", handlePenMove)
+          stage.off("touchend", handlePenUp)
       
         }
       }
@@ -121,8 +128,10 @@ function PenLayer({ tool , transform }, refs) {
       
       
         stage.on("mousemove", handleErase)
+        stage.on("touchmove", handleErase)
       
         return () => {
+          stage.off("mousemove" , handleErase)
           stage.off("mousemove" , handleErase)
         }}
       

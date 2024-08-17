@@ -65,12 +65,18 @@ useEffect(() => {
     stage.on("mousedown" , handleEllipseDown)
     stage.on("mousemove" , handleEllipseMove)
     stage.on("mouseup" , handleEllipseUp)
+    stage.on("touchstart", handleEllipseDown)
+    stage.on("touchmove", handleEllipseMove)
+    stage.on("touchend", handleEllipseUp)
 
 
     return () => {
       stage.off("mousedown" , handleEllipseDown)
       stage.off("mousemove" , handleEllipseMove)
       stage.off("mouseup" , handleEllipseUp)
+      stage.off("touchstart", handleEllipseDown)
+      stage.off("touchmove", handleEllipseMove)
+      stage.off("touchend", handleEllipseUp)
   
     }
   }
@@ -102,8 +108,10 @@ useEffect(() => {
   
   
     stage.on("mousemove", handleErase)
+    stage.on("touchmove", handleErase)
   
     return () => {
+      stage.off("mousemove" , handleErase)
       stage.off("mousemove" , handleErase)
     }}
   
