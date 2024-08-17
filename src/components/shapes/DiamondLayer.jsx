@@ -89,12 +89,12 @@ useEffect(() => {
 useEffect(() => {
   
   const stage = stageRef.current
-  if(tool === "Eraser" && stageRef.current) {
+  if(tool === "Eraser" && stage) {
    
    
     const handleErase = (e) => {
      
-    const pos = e.target.getStage().getRelativePointerPosition()
+    const pos =  stage.getRelativePointerPosition()
 
      
     setDiamonds(shapes => shapes.filter((shape) => {
@@ -118,7 +118,7 @@ useEffect(() => {
   
     return () => {
       stage.off("mousemove" , handleErase)
-      stage.off("mousemove" , handleErase)
+      stage.off("touchmove" , handleErase)
     }}
   
   }, [ tool])

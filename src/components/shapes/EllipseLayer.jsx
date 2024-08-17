@@ -28,7 +28,7 @@ function EllipseLayer({ tool, transform}, refs) {
   const handleEllipseDown = (e) => {
   
      isDrawing.current = true
-     const pos = e.target.getStage().getRelativePointerPosition()
+     const pos = e.target.getStage().getPointerPosition()
    
      setEllipses([...ellipses, { x:pos.x, y:pos.y, radiusX : 0, radiusY : 0}])
   }
@@ -37,7 +37,7 @@ function EllipseLayer({ tool, transform}, refs) {
   const handleEllipseMove =  (e) => {
      if(!isDrawing.current) return
     
-     const pos = e.target.getStage().getRelativePointerPosition()
+     const pos = e.target.getStage().getPointerPosition()
     
      const lastEllipse = ellipses[ellipses.length - 1]
      lastEllipse.radiusY =Math.abs(lastEllipse.y- pos.y  )
@@ -86,14 +86,14 @@ useEffect(() => {
 
 useEffect(() => {
   
-
-  if(tool === "Eraser" && stageRef.current) {
+   
+  const stage = stageRef.current
+  if(tool === "Eraser" && stage) {
     
-    const stage = stageRef.current
 
     const handleErase = (e) => {
     
-    const pos = e.target.getStage().getRelativePointerPosition()
+    const pos = stage.getRelativePointerPosition()
 
      
     setEllipses(shapes => shapes.filter((shape) => {
@@ -112,7 +112,7 @@ useEffect(() => {
   
     return () => {
       stage.off("mousemove" , handleErase)
-      stage.off("mousemove" , handleErase)
+      stage.off("touchmove" , handleErase)
     }}
   
   }, [ tool])

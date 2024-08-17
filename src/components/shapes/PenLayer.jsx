@@ -28,6 +28,8 @@ function PenLayer({ tool , transform }, refs) {
 
 
   const handlePenDown = (e) => {
+     
+     
       isDrawing.current = true
       const pos = e.target.getStage().getRelativePointerPosition()
       
@@ -97,12 +99,12 @@ function PenLayer({ tool , transform }, refs) {
     useEffect(() => {
     
       const stage = stageRef.current
-      if(tool === "Eraser" && stageRef.current) {
+      if(tool === "Eraser" && stage) {
       
         const handleErase = (e) => {
           
           
-        const pos = e.target.getStage().getRelativePointerPosition()
+        const pos = stage.getRelativePointerPosition()
     
          
         setLines(shapes => shapes.filter((shape) => {
@@ -132,7 +134,7 @@ function PenLayer({ tool , transform }, refs) {
       
         return () => {
           stage.off("mousemove" , handleErase)
-          stage.off("mousemove" , handleErase)
+           stage.off("touchmove" , handleErase)
         }}
       
       }, [ tool])
